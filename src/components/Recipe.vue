@@ -3,21 +3,20 @@
     <h1>
       Простой и вкусный рецепт <strong>Пиццы</strong>
     </h1>
-    <div
-      class="delimiter"
+    <part
       v-for="(part, index) in parts"
       :key="part.title"
+      :title="part.title"
+      :description="part.description"
+      :complete="part.complete"
       @click="handleClick(index)"
-    >
-      <h2>{{part.title}}</h2>
-      <div v-if="part.complete" class="right">🔘</div>
-      <div v-else class="right">⚪️</div>
-      <p v-html="part.description"></p>
-    </div>
+    />
     <p>Вуаля</p>
   </div>
 </template>
 <script>
+import RecipePart from './RecipePart';
+
 export default {
   data() {
     return {
@@ -46,7 +45,8 @@ export default {
       //this.parts[index].complete = !this.parts[index].complete; // wrong
       this.$set(this.parts[index], 'complete', !this.parts[index].complete) // right
     }
-  }
+  },
+  components: { part: RecipePart }
 }
 </script>
 <style>
