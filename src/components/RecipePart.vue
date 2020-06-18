@@ -1,5 +1,11 @@
 <template>
-  <div class="delimiter" @click="$emit('click')">
+  <div
+    :class="[
+      'delimiter',
+      { complete }
+    ]"
+    @click="$emit('click')"
+  >
     <h2>{{title}}</h2>
     <div v-if="complete" class="right">🔘</div>
     <div v-else class="right">⚪️</div>

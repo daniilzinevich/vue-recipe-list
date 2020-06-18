@@ -80,9 +80,13 @@ ol, ul {
   margin: 0.25em 1em;
 }
 .delimiter {
+  cursor: pointer;
   text-align: left;
   margin: 1em auto;
   max-width: 600px;
+}
+.delimiter.complete {
+  color: #aaa;
 }
 
 .right {
