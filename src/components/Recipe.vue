@@ -11,7 +11,8 @@
       :complete="part.complete"
       @click="handleClick(index)"
     />
-    <p>Вуаля</p>
+    <p v-if="!complete">{{totalSteps}} из {{parts.length}} готово</p>
+    <p v-else>Вуаля</p>
   </div>
 </template>
 <script>
@@ -46,7 +47,15 @@ export default {
       this.$set(this.parts[index], 'complete', !this.parts[index].complete) // right
     }
   },
-  components: { part: RecipePart }
+  components: { part: RecipePart },
+  computed: {
+    totalSteps() {
+      return this.parts.reduce((count, part) => part.complete ? count + 1 : count, 0);
+    },
+    complete() {
+      return this.parts.every(part => part.complete);
+    }
+  }
 }
 </script>
 <style>

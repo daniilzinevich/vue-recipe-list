@@ -14,6 +14,10 @@
 </template>
 <script>
 export default {
-  props: ['title', 'description', 'complete']
+  props: {
+    title: String,
+    description: String,
+    complete: Boolean,
+  },
 }
 </script>
