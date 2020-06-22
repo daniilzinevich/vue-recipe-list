@@ -1,5 +1,9 @@
 <template>
   <div>
+    <timer
+      v-if="!complete"
+      :time="nextTimer"
+    />
     <h1>
       Простой и вкусный рецепт <strong>Пиццы</strong>
     </h1>
@@ -17,6 +21,7 @@
 </template>
 <script>
 import RecipePart from './RecipePart';
+import Timer from './Timer';
 
 export default {
   data() {
@@ -24,7 +29,8 @@ export default {
       parts: [
         {
           title: 'Подготовить тесто',
-          description: 'Смешать тесто и раскатать на противне, поставить в духовку заранее разргретую до максимума. Подержать 10 минут пока тесто не станет слегка твердоватым.'
+          description: 'Смешать тесто и раскатать на противне, поставить в духовку заранее разргретую до максимума. Подержать 10 минут пока тесто не станет слегка твердоватым.',
+          time: 600
         },
         {
           title: 'Подготовить основу',
@@ -36,18 +42,22 @@ export default {
         },
         {
           title: 'Запечь',
-          description: 'Ставишь в духовку до того, как сыр растечется и будет красота, это от 5 до 10 минут (зависит от духовки). Достаёшь, посыпаешь натертым пармезаном.'
+          description: 'Ставишь в духовку до того, как сыр растечется и будет красота, это от 5 до 10 минут (зависит от духовки). Достаёшь, посыпаешь натертым пармезаном.',
+          time: 300
         }
-      ]
+      ],
+      nextTimer: 0
     };
   },
   methods: {
     handleClick(index) {
-      //this.parts[index].complete = !this.parts[index].complete; // wrong
-      this.$set(this.parts[index], 'complete', !this.parts[index].complete) // right
+      this.$set(this.parts[index], 'complete', !this.parts[index].complete)
+      if (index < this.parts.length && this.parts[index + 1].time) {
+        this.nextTimer = this.parts[index + 1].time
+      }
     }
   },
-  components: { part: RecipePart },
+  components: { part: RecipePart, Timer },
   computed: {
     totalSteps() {
       return this.parts.reduce((count, part) => part.complete ? count + 1 : count, 0);
