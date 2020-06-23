@@ -1,9 +1,12 @@
 <template>
-  <div id="timer">
-    <div>{{formatedTimeout}}</div>
+  <div id="overlay">
+    <div class="close" @click.stop="toggleCollapse">➖</div>
+    <div id="timer" v-if="!collapsed">
+      <div>{{formatedTimeout}}</div>
 
-    <button @click="startTimer" v-if="pause">Start timer</button>
-    <button @click="pauseTimer" v-else>Pause timer</button>
+      <button @click="startTimer" v-if="pause">Start timer</button>
+      <button @click="pauseTimer" v-else>Pause timer</button>
+    </div>
   </div>
 </template>
 <script>
@@ -12,7 +15,8 @@ export default {
     return {
       timeout: 600,
       pause: true,
-      timer: 0
+      timer: 0,
+      collapsed: false
     };
   },
   props: {
@@ -32,7 +36,13 @@ export default {
   methods: {
     startTimer() {
       this.pause = false;
-      this.timer = setInterval(() => this.timeout--, 1000);
+      this.timer = setInterval(() => {
+        if (this.timeout > 0) {
+          this.timeout--
+        } else {
+          clearTimeout(this.timer)
+        }
+      }, 1000);
     },
     pauseTimer() {
       this.pause = true;
@@ -46,15 +56,30 @@ export default {
     },
     toTwoDigitString(number) {
       return number.toString().length == 2 ? number : '0' + number;
+    },
+    toggleCollapse() {
+      console.log('toggle collapse')
+      this.collapsed = !this.collapsed;
     }
   }
 };
 </script>
 <style>
+  #overlay {
+    position: fixed;
+    right: 1em;
+    top: 60px;
+    z-index: 2;
+  }
+  #overlay .close {
+    right: 1em;
+    z-index: 3;
+  }
+
   #timer {
     background-image: url('~@/assets/tomato.png');
     text-transform: uppercase;
-    position: absolute;
+    position: relative;
     width: 216px;
     height: 60px;
     right: 1em;
@@ -62,7 +87,6 @@ export default {
     text-align: center;
     color: #fcfef0;
     padding: 60px 0;
-    margin-top: 60px;
   }
 
   #timer div {

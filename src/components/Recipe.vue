@@ -111,4 +111,12 @@ ol, ul {
 .right {
   float: right;
 }
+
+.close {
+  font-size: 1em !important;
+  position: absolute;
+  cursor: pointer;
+  right: 0;
+  top: 0;
+}
 </style>
