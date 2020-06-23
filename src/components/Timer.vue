@@ -55,8 +55,8 @@ export default {
     background-image: url('~@/assets/tomato.png');
     text-transform: uppercase;
     position: absolute;
-    width: 230px;
-    height: 65px;
+    width: 216px;
+    height: 60px;
     right: 1em;
     top: 0;
     text-align: center;
