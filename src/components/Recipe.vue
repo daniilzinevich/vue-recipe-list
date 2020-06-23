@@ -89,6 +89,7 @@ ol, ul {
   display: block;
   position: relative;
   margin-left: 0.5em;
+  margin-right: 1em;
   flex: 1;
   height: 1px;
   top: 0.625em;
@@ -100,6 +101,7 @@ ol, ul {
 }
 .delimiter {
   cursor: pointer;
+  position: relative;
   text-align: left;
   margin: 1em auto;
   max-width: 600px;
