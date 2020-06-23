@@ -10,13 +10,15 @@
   </div>
 </template>
 <script>
+import toggleCollapse from './toggleCollapse.mixin'
+import timeFormat from './timeFormat.mixin'
+
 export default {
   data() {
     return {
       timeout: 600,
       pause: true,
-      timer: 0,
-      collapsed: false
+      timer: 0
     };
   },
   props: {
@@ -40,28 +42,16 @@ export default {
         if (this.timeout > 0) {
           this.timeout--
         } else {
-          clearTimeout(this.timer)
+          this.pauseTimer()
         }
       }, 1000);
     },
     pauseTimer() {
       this.pause = true;
       clearTimeout(this.timer);
-    },
-    toHoursString(time) {
-      return this.toTwoDigitString(Math.floor(time / 3600));
-    },
-    toMinutesString(time) {
-      return this.toTwoDigitString(Math.floor(time / 60 % 60));
-    },
-    toTwoDigitString(number) {
-      return number.toString().length == 2 ? number : '0' + number;
-    },
-    toggleCollapse() {
-      console.log('toggle collapse')
-      this.collapsed = !this.collapsed;
     }
-  }
+  },
+  mixins: [toggleCollapse, timeFormat],
 };
 </script>
 <style>
