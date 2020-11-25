@@ -12,12 +12,13 @@
 <script>
 import toggleCollapse from './toggleCollapse.mixin'
 import timeFormat from './timeFormat.mixin'
-import { reactive } from 'vue'
+import { reactive, watch, toRefs } from 'vue'
 
 export default {
-  setup() {
+  setup(props) {
+    const { time } = toRefs(props);
     const timer = reactive({
-      timeout: 10,
+      timeout: 600,
       pause: true,
       timer: 0
     });
@@ -37,7 +38,13 @@ export default {
       clearTimeout(timer.timer);
     };
 
+    watch(time, async (newTime) => {
+      pauseTimer();
+      timer.timeout = newTime;
+    });
+
     return {
+      time,
       timer,
       startTimer,
       pauseTimer
@@ -46,12 +53,6 @@ export default {
   props: {
     time: Number
   },
-  // watch: {
-  //   time(value) {
-  //     this.pauseTimer();
-  //     this.timeout = value;
-  //   }
-  // },
   computed: {
     formatedTimeout() {
       return `${this.toHoursString(this.timeout)}:${this.toMinutesString(this.timeout)}:${this.toTwoDigitString(this.timeout % 60)}`;
