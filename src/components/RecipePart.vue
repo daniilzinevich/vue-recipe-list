@@ -24,6 +24,7 @@ export default {
     description: String,
     complete: Boolean,
   },
+  emits: ['click'],
   mixins: [toggleCollapse],
 }
 </script>

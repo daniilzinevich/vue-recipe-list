@@ -51,8 +51,8 @@ export default {
   },
   methods: {
     handleClick(index) {
-      this.$set(this.parts[index], 'complete', !this.parts[index].complete)
-      if (index < this.parts.length && this.parts[index + 1].time) {
+      this.parts[index].complete = !this.parts[index].complete;
+      if (index < this.parts.length - 1 && this.parts[index + 1].time) {
         this.nextTimer = this.parts[index + 1].time
       }
     }
