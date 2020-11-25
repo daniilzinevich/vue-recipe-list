@@ -16,7 +16,7 @@
   </div>
 </template>
 <script>
-import toggleCollapse from './toggleCollapse.mixin'
+import useCollapse from './useCollapse'
 
 export default {
   props: {
@@ -25,6 +25,6 @@ export default {
     complete: Boolean,
   },
   emits: ['click'],
-  mixins: [toggleCollapse],
+  setup() { return useCollapse() },
 }
 </script>

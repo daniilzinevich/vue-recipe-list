@@ -2,7 +2,7 @@
   <div id="overlay">
     <div class="close" @click.stop="toggleCollapse">➖</div>
     <div id="timer" v-if="!collapsed">
-      <div>{{timer.timeout}}</div>
+      <div>{{formatedTimeout}}</div>
 
       <button @click="startTimer" v-if="timer.pause">Start timer</button>
       <button @click="pauseTimer" v-else>Pause timer</button>
@@ -10,9 +10,9 @@
   </div>
 </template>
 <script>
-import toggleCollapse from './toggleCollapse.mixin'
-import timeFormat from './timeFormat.mixin'
-import { reactive, watch, toRefs } from 'vue'
+import useCollapse from './useCollapse'
+import useTimeFormat from './useTimeFormat'
+import { reactive, computed, watch, toRefs } from 'vue'
 
 export default {
   setup(props) {
@@ -43,22 +43,26 @@ export default {
       timer.timeout = newTime;
     });
 
+    const { toHoursString, toMinutesString, toTwoDigitString } = useTimeFormat();
+    const formatedTimeout = computed(() => {
+      return `${toHoursString(timer.timeout)}:${toMinutesString(timer.timeout)}:${toTwoDigitString(timer.timeout % 60)}`;
+    });
+
+    const { collapsed, toggleCollapse } = useCollapse();
+
     return {
       time,
       timer,
+      formatedTimeout,
       startTimer,
-      pauseTimer
+      pauseTimer,
+      collapsed,
+      toggleCollapse,
     };
   },
   props: {
     time: Number
   },
-  computed: {
-    formatedTimeout() {
-      return `${this.toHoursString(this.timeout)}:${this.toMinutesString(this.timeout)}:${this.toTwoDigitString(this.timeout % 60)}`;
-    }
-  },
-  mixins: [toggleCollapse, timeFormat],
 };
 </script>
 <style>
