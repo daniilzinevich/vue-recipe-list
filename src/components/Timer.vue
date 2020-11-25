@@ -2,9 +2,9 @@
   <div id="overlay">
     <div class="close" @click.stop="toggleCollapse">➖</div>
     <div id="timer" v-if="!collapsed">
-      <div>{{formatedTimeout}}</div>
+      <div>{{timer.timeout}}</div>
 
-      <button @click="startTimer" v-if="pause">Start timer</button>
+      <button @click="startTimer" v-if="timer.pause">Start timer</button>
       <button @click="pauseTimer" v-else>Pause timer</button>
     </div>
   </div>
@@ -12,43 +12,49 @@
 <script>
 import toggleCollapse from './toggleCollapse.mixin'
 import timeFormat from './timeFormat.mixin'
+import { reactive } from 'vue'
 
 export default {
-  data() {
-    return {
-      timeout: 600,
+  setup() {
+    const timer = reactive({
+      timeout: 10,
       pause: true,
       timer: 0
+    });
+
+    const startTimer = async () => {
+      timer.pause = false;
+      timer.timer = setInterval(() => {
+        if (timer.timeout > 0) {
+          timer.timeout--
+        } else {
+          pauseTimer()
+        }
+      }, 1000);
+    };
+    const pauseTimer = async () => {
+      timer.pause = true;
+      clearTimeout(timer.timer);
+    };
+
+    return {
+      timer,
+      startTimer,
+      pauseTimer
     };
   },
   props: {
     time: Number
   },
-  watch: {
-    time(value) {
-      this.pauseTimer();
-      this.timeout = value;
-    }
-  },
+  // watch: {
+  //   time(value) {
+  //     this.pauseTimer();
+  //     this.timeout = value;
+  //   }
+  // },
   computed: {
     formatedTimeout() {
       return `${this.toHoursString(this.timeout)}:${this.toMinutesString(this.timeout)}:${this.toTwoDigitString(this.timeout % 60)}`;
-    }
-  },
-  methods: {
-    startTimer() {
-      this.pause = false;
-      this.timer = setInterval(() => {
-        if (this.timeout > 0) {
-          this.timeout--
-        } else {
-          this.pauseTimer()
-        }
-      }, 1000);
-    },
-    pauseTimer() {
-      this.pause = true;
-      clearTimeout(this.timer);
     }
   },
   mixins: [toggleCollapse, timeFormat],
